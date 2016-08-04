@@ -209,10 +209,17 @@ fi
 
 #  Activating all Plugins installed
 # --------------------------------
-if [ "$ACTIVATE_PLUGINS" == 'true' ]; then
-  printf "=> Activating all plugins installed ... "
-  sudo -u www-data wp plugin activate --all
-  printf "Done!\n"
+printf "=> Activating plugins...\n"
+if [ "$ACTIVATE_PLUGINS" ]; then
+  while IFS=',' read -ra plugin; do
+    for i in "${!plugin[@]}"; do
+      plugin_name=$(echo "${plugin[$i]}" | xargs)
+      printf "=> ($((i+1))/${#plugin[@]}) Activating plugin '%s'. ...\n" "${plugin_name}"
+      sudo -u www-data wp plugin activate "${plugin_name}" --allow-root
+    done
+  done <<< "$ACTIVATE_PLUGINS"
+else
+  printf "Skip!\n"
 fi
 
 
