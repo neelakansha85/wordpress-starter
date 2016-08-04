@@ -199,9 +199,12 @@ fi
 
 # Activating Theme
 # ----------------
-printf "=> Activating theme for main site... "
-sudo -u www-data wp theme activate "$ACTIVE_THEME"
-printf "Done!\n"
+if [ "$ACTIVE_THEME" ]; then
+  printf "=> Activating theme for main site... "
+  sudo -u www-data wp theme activate "$ACTIVE_THEME" --allow-root >/dev/null 2>&1 || \
+      ERROR $LINENO "Failed to activate theme"
+  printf "Done!\n"
+fi
 
 
 #  Activating all Plugins installed
