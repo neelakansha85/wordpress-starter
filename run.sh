@@ -2,6 +2,7 @@
 
 [ "$DB_NAME" ]  || DB_NAME='wordpress'
 [ "$DB_PASS" ]  || DB_PASS='root'
+[ "$SITE_TITLE" ]  || SITE_TITLE='wordpress'
 [ "$THEMES" ]   || THEMES='twentysixteen'
 [ "$WP_DEBUG" ] || WP_DEBUG='false'
 [ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='false'
@@ -43,7 +44,7 @@ core config:
 
 core $CORE_INSTALL:
   url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
-  title: $DB_NAME
+  title: $SITE_TITLE
   admin_user: root
   admin_password: $DB_PASS
   admin_email: $ADMIN_EMAIL
