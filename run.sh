@@ -10,7 +10,6 @@
 [ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='false'
 [ "$WP_DEBUG_DISPLAY" ] || WP_DEBUG_DISPLAY='true'
 [ "$ADMIN_EMAIL" ] || ADMIN_EMAIL="admin@${DB_NAME}.com"
-[ "$WP_ALLOW_MULTISITE" ] || WP_ALLOW_MULTISITE='false'
 [ "$SEARCH_REPLACE" ] && \
   BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
   AFTER_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 2) || \
@@ -20,12 +19,6 @@ ERROR () {
   echo -e "\n=> $(tput -T xterm setaf 1)$(tput -T xterm bold)ERROR$(tput -T xterm sgr 0) (Line $1): $2.";
   exit 1;
 }
-
-if [ "$WP_ALLOW_MULTISITE" == true ]; then
-  CORE_INSTALL='multisite-install'
-else
-  CORE_INSTALL='install'
-fi
 
 # Configure wp-cli
 # ----------------
@@ -44,7 +37,7 @@ core config:
     define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,});
     define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,});
 
-core $CORE_INSTALL:
+core install:
   url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
   title: $SITE_TITLE
   admin_user: root
@@ -113,7 +106,7 @@ if [ ! "$(wp core is-installed --allow-root >/dev/null 2>&1 && echo $?)" ]; then
     fi
   else
     printf "=> No database backup found. Initializing new database... "
-    sudo -u www-data wp core "$CORE_INSTALL" >/dev/null 2>&1 || \
+    sudo -u www-data wp core install >/dev/null 2>&1 || \
       ERROR $LINENO "WordPress Install Failed"
     printf "Done!\n"
   fi
