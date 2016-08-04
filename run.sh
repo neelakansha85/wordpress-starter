@@ -4,6 +4,7 @@
 [ "$DB_PASS" ]  || DB_PASS='root'
 [ "$SITE_TITLE" ]  || SITE_TITLE='wordpress'
 [ "$THEMES" ]   || THEMES='twentysixteen'
+[ "$ACTIVE_THEME" ]   || ACTIVE_THEME='twentysixteen'
 [ "$WP_DEBUG" ] || WP_DEBUG='false'
 [ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='false'
 [ "$WP_DEBUG_DISPLAY" ] || WP_DEBUG_DISPLAY='true'
@@ -188,6 +189,13 @@ if [ -d /app/wp-content/plugins/akismet ]; then
   sudo -u www-data wp theme install "${THEME_LIST[@]}"
   printf "Done!\n"
 fi
+
+
+# Activating Theme
+# ----------------
+printf "=> Activating theme for main site... "
+sudo -u www-data wp theme activate "$ACTIVE_THEME"
+printf "Done!\n"
 
 
 printf "\t%s\n" \
