@@ -5,6 +5,7 @@
 [ "$SITE_TITLE" ]  || SITE_TITLE='wordpress'
 [ "$THEMES" ]   || THEMES='twentysixteen'
 [ "$ACTIVE_THEME" ]   || ACTIVE_THEME='twentysixteen'
+[ "$ACTIVATE_PLUGINS" ]   || ACTIVATE_PLUGINS=false
 [ "$WP_DEBUG" ] || WP_DEBUG='false'
 [ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='false'
 [ "$WP_DEBUG_DISPLAY" ] || WP_DEBUG_DISPLAY='true'
@@ -196,6 +197,15 @@ fi
 printf "=> Activating theme for main site... "
 sudo -u www-data wp theme activate "$ACTIVE_THEME"
 printf "Done!\n"
+
+
+#  Activating all Plugins installed
+# --------------------------------
+if [ "$ACTIVATE_PLUGINS" == 'true' ]; then
+  printf "=> Activating all plugins installed ... "
+  sudo -u www-data wp plugin activate --all
+  printf "Done!\n"
+fi
 
 
 printf "\t%s\n" \
